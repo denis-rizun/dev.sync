@@ -1,0 +1,19 @@
+from enum import StrEnum
+
+
+class ServerStatusEnum(StrEnum):
+    ACTIVE = "active"
+    INACTIVE = "inactive"
+
+
+class StatusEnum(StrEnum):
+    SUCCESS = "success"
+    IN_PROGRESS = "in_progress"
+    ERROR = "error"
+    WAITING = "waiting"
+    EXCEPT = "except"
+
+
+class ColumnEnum(StrEnum):
+    ID = "id"
+    USERNAME = "username"

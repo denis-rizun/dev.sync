@@ -1,0 +1,94 @@
+from typing import Any
+
+from sqlalchemy import select, update, delete
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from backend.domain.abstractions.repositories import IRepository
+from backend.domain.enums.common import ColumnEnum
+from backend.domain.enums.repository import OrderByEnum
+from backend.domain.types import ModelType, EntityType, MapperType
+
+
+class BaseRepository(IRepository[ModelType, EntityType, MapperType]):
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
+
+    async def create(self, entity: EntityType) -> ModelType:
+        model = self.MAPPER.to_model(entity)
+        self.session.add(model)
+        await self.session.flush()
+        return model
+
+    async def get(
+            self,
+            column: ColumnEnum,
+            value: Any,
+            is_many: bool = False
+    ) -> ModelType | list[ModelType] | None:
+        stmt = select(self.MODEL).where(getattr(self.MODEL, column.value) == value)
+        result = await self.session.execute(stmt)
+        if is_many:
+            return result.scalars().all()
+
+        return result.scalar_one_or_none()
+
+    async def get_existed(self, column: ColumnEnum, value: Any) -> ModelType:
+        stmt = select(self.MODEL).where(getattr(self.MODEL, column.value) == value)
+        result = await self.session.execute(stmt)
+        return result.scalar_one()
+
+    async def get_filtered(
+            self,
+            filters: dict[ColumnEnum, Any],
+            is_many: bool = False,
+            unique: bool = False,
+            order_by: OrderByEnum | None = None,
+            limit: int | None = None,
+            offset: int | None = None,
+            options: list[Any] | None = None
+    ) -> ModelType | list[ModelType] | None:
+        stmt = select(self.MODEL)
+        if options:
+            for opt in options:
+                stmt = stmt.options(opt)
+
+        for field, value in filters.items():
+            column = getattr(self.MODEL, field.value)
+
+            if isinstance(value, (list, tuple, set)):
+                stmt = stmt.where(column.in_(value))
+            else:
+                stmt = stmt.where(column == value)
+
+        if order_by:
+            stmt = stmt.order_by(getattr(self.MODEL, order_by))
+
+        if limit is not None:  # limit=0 -> python interprets like False
+            stmt = stmt.limit(limit)
+
+        if offset is not None:  # offset=0 -> python interprets like False
+            stmt = stmt.offset(offset)
+
+        result = await self.session.execute(stmt)
+        scalars = result.unique().scalars() if unique else result.scalars()
+        return scalars.all() if is_many else scalars.first()
+
+    async def update(
+            self,
+            column: ColumnEnum,
+            value: Any,
+            data: dict[ColumnEnum, Any]
+    ) -> ModelType:
+        stmt = (
+            update(self.MODEL)
+            .where(getattr(self.MODEL, column.value) == value)
+            .values(**{key.value: val for key, val in data.items()})
+            .returning(self.MODEL)
+        )
+        result = await self.session.execute(stmt)
+        await self.session.flush()
+        return result.scalar_one()
+
+    async def delete(self, column: ColumnEnum, value: Any) -> None:
+        stmt = delete(self.MODEL).where(getattr(self.MODEL, column.value) == value)
+        await self.session.execute(stmt)
