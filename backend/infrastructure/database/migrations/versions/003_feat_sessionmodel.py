@@ -19,7 +19,7 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     op.create_table('sessions',
     sa.Column('user_id', sa.UUID(), nullable=False),
-    sa.Column('refresh_token', sa.String(), nullable=False),
+    sa.Column('refresh_token', sa.String(), nullable=False, unique=True),
     sa.Column('ip', sa.String(), nullable=False),
     sa.Column('agent', sa.String(), nullable=False),
     sa.Column('revoked', sa.Boolean(), nullable=False),
@@ -30,6 +30,8 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_index('ix_sessions_refresh_token', 'sessions', ['refresh_token'])
+
     op.drop_column('users', 'location')
 
 

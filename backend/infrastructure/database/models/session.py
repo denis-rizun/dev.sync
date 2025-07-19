@@ -13,7 +13,7 @@ class SessionModel(Base, IDMixin, TimestampMixin):
     __tablename__ = 'sessions'
 
     user_id: Mapped[UUID] = mapped_column(PG_UUID(as_uuid=True), ForeignKey('users.id'))
-    refresh_token: Mapped[str]
+    refresh_token: Mapped[str] = mapped_column(unique=True, index=True)
     ip: Mapped[str]
     agent: Mapped[str]
     revoked: Mapped[bool] = mapped_column(default=False)

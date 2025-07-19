@@ -66,6 +66,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
             try:
                 decoded_token = JWTHandler.decode_token(token)
                 request.state.user_id = decoded_token["sub"]
+                request.state.jti = decoded_token["jti"]
                 return await call_next(request)
             except AuthenticationError as e:
                 return JSONResponse(

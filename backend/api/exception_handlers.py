@@ -1,7 +1,7 @@
 from fastapi import HTTPException, FastAPI
 from starlette.requests import Request
 
-from backend.core.exceptions import DuplicateDataError, AuthenticationError
+from backend.core.exceptions import DuplicateDataError, AuthenticationError, ValidationError
 
 
 class ExceptionHandler:
@@ -21,3 +21,11 @@ class ExceptionHandler:
                 exc: DuplicateDataError
         ) -> None:
             raise HTTPException(status_code=403, detail=str(exc))
+
+        @app.exception_handler(ValidationError)
+        async def validation_exception_handler(
+                request: Request,
+                exc: ValidationError
+        ) -> None:
+            raise HTTPException(status_code=400, detail=str(exc))
+

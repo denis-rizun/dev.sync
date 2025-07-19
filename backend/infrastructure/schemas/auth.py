@@ -25,4 +25,3 @@ class LoginSchema(RegistrationSchema):
 class TokenSchema(DevSyncSchema):
     token_type: str = "Bearer"
     access_token: str
-    refresh_token: str

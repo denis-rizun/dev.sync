@@ -1,11 +1,7 @@
 from datetime import datetime, timedelta
 
 from backend.core.config import config
-from backend.core.exceptions import (
-    DuplicateDataError,
-    CredentialsError,
-    NotFoundError,
-)
+from backend.core.exceptions import DuplicateDataError, CredentialsError, NotFoundError, AuthenticationError
 from backend.core.logger import Logger
 from backend.core.utils import Mapper
 from backend.domain.abstractions.repositories import IUserRepository
@@ -17,7 +13,7 @@ from backend.domain.entities.token import TokenEntity
 from backend.domain.entities.user import UserEntity
 from backend.domain.enums.common import ColumnEnum
 from backend.infrastructure.security.jwt_handler import JWTHandler
-from backend.infrastructure.security.pasword import PasswordHelper
+from backend.infrastructure.security.password import PasswordHelper
 
 logger = Logger.setup_logger(__name__)
 
@@ -58,7 +54,7 @@ class AuthService(IAuthService):
         if not is_password_correct:
             raise CredentialsError(message='Credentials are incorrect')
 
-        token_dto = self.create_tokens(entity=existing)
+        token_dto = self._create_tokens(entity=existing)
         new_session = await self._session_repo.create(
             entity=SessionEntity(
                 user_id=existing.id,
@@ -71,25 +67,32 @@ class AuthService(IAuthService):
         logger.info(f"[AuthService]: Logged in user: {new_session!r}")
         return Mapper.to_entity(entity=TokenEntity, dto=token_dto)
 
-    async def logout(self, id: int) -> None:
-        existing = await self._session_repo.get_filtered(
-            filters={
-                ColumnEnum.USER_ID: id,
-                ColumnEnum.REVOKED: False,
-            }
-        )
+    async def logout(self, id: int, token: str | None) -> None:
+        if not token:
+            raise AuthenticationError(message="Refresh token missing")
+
+        existing = await self._session_repo.get_active_session(user_id=id, token=token)
         if not existing:
             raise NotFoundError(message='Active session not found')
 
         await self._session_repo.update(
-            column=ColumnEnum.USER_ID,
-            value=id,
+            column=ColumnEnum.ID,
+            value=existing.id,
             data={ColumnEnum.REVOKED: True}
         )
         logger.info(f"[AuthService]: Logged out user: {id}")
 
+    async def refresh_access_token(self, token: str | None) -> TokenEntity:
+        if not token:
+            raise AuthenticationError(message="Refresh token missing")
+
+        data = JWTHandler.decode_token(token=token)
+        existing = await self._user_repo.get_existed(column=ColumnEnum.ID, value=data["sub"])
+        access_token = JWTHandler.create_access_token(id=existing.id, username=existing.username)
+        return TokenEntity(access_token=access_token)
+
     @classmethod
-    def create_tokens(cls, entity: UserEntity) -> TokenDTO:
+    def _create_tokens(cls, entity: UserEntity) -> TokenDTO:
         access_token = JWTHandler.create_access_token(id=entity.id, username=entity.username)
         refresh_token = JWTHandler.create_refresh_token(id=entity.id)
         return TokenDTO(access_token=access_token, refresh_token=refresh_token)
