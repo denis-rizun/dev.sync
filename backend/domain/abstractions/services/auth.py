@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from uuid import UUID
 
 from backend.domain.dtos.auth import RegistrationDTO, LoginDTO
 from backend.domain.entities.token import TokenEntity
@@ -16,7 +17,7 @@ class IAuthService(ABC):
         pass
 
     @abstractmethod
-    async def logout(self, id: int, token: str | None) -> None:
+    async def logout(self, user_id: UUID, token: str | None) -> None:
         pass
 
     @abstractmethod

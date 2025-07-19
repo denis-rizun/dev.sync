@@ -30,9 +30,18 @@ class CredentialsError(AuthenticationError):
     pass
 
 
-class SignatureError(DevSyncError):
+class SignatureError(AuthenticationError):
     pass
 
 
-class TokenExpiredError(DevSyncError):
+class TokenExpiredError(AuthenticationError):
+    pass
+
+
+class PermissionDeniedError(AuthenticationError):
+    pass
+
+
+# ----------------- BusinessLogic -----------------
+class ConflictError(DevSyncError):
     pass

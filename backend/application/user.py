@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from backend.core.exceptions import NotFoundError
 from backend.core.logger import Logger
 from backend.domain.abstractions.repositories import IUserRepository
@@ -12,7 +14,7 @@ class UserService(IUserService):
     def __init__(self, user_repo: IUserRepository) -> None:
         self._user_repo = user_repo
 
-    async def get_account(self, id: int) -> UserEntity:
+    async def get_account(self, id: UUID) -> UserEntity:
         existing = await self._user_repo.get(column=ColumnEnum.ID, value=id)
         if not existing:
             raise NotFoundError(message='User not found')

@@ -1,4 +1,4 @@
-from typing import Self
+from typing import Self, Any
 
 from pydantic import EmailStr, model_validator
 
@@ -10,6 +10,12 @@ class RegistrationSchema(DevSyncSchema):
     username: str | None = None
     mail: EmailStr | None = None
     password: str
+
+    @model_validator(mode="before")
+    def fill_username_from_mail(cls, data: dict[str, Any]):  # noqa
+        if data.get("username") is None and data.get("mail"):
+            data["username"] = data["mail"].split("@")[0]
+        return data
 
     @model_validator(mode="after")
     def at_least_one_identifier(self) -> Self:

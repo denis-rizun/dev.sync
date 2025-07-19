@@ -16,11 +16,11 @@ class SessionRepository(
     MODEL = SessionModel
     MAPPER = SessionMapper
 
-    async def get_active_session(self, user_id: int, token: str | None = None) -> SessionEntity | None:
+    async def get_active_session(self, user_id: int, token: str) -> SessionEntity | None:
         stmt = (
             select(self.MODEL)
             .where(self.MODEL.user_id == user_id)
-            .where(self.MODEL.revoked == False)
+            .where(self.MODEL.revoked == False)  # noqa: E712
             .where(self.MODEL.expired_at > datetime.now())
             .where(self.MODEL.refresh_token == token)
         )
