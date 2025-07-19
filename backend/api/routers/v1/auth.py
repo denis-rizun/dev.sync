@@ -2,7 +2,6 @@ from fastapi import APIRouter
 from starlette.requests import Request
 from starlette.responses import Response
 
-from backend.core.exceptions import AuthenticationError
 from backend.core.utils import Mapper
 from backend.domain.dtos.auth import RegistrationDTO, LoginDTO
 from backend.domain.enums.token import JWTTokenType

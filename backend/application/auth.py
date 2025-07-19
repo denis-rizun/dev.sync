@@ -1,7 +1,12 @@
 from datetime import datetime, timedelta
 
 from backend.core.config import config
-from backend.core.exceptions import DuplicateDataError, CredentialsError, NotFoundError, AuthenticationError
+from backend.core.exceptions import (
+    DuplicateDataError,
+    CredentialsError,
+    NotFoundError,
+    AuthenticationError
+)
 from backend.core.logger import Logger
 from backend.core.utils import Mapper
 from backend.domain.abstractions.repositories import IUserRepository
