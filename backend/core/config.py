@@ -24,6 +24,10 @@ class DevSyncConfig(BaseSettings):
     OUTER_POSTGRES_PORT: int
     POSTGRES_URL: str
 
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    REFRESH_TOKEN_EXPIRE_MINUTES: int
+
     @property
     def database_connection(self) -> str:
         return (
@@ -32,6 +36,16 @@ class DevSyncConfig(BaseSettings):
             f"@{self.POSTGRES_HOST}:{self.INNER_POSTGRES_PORT}"
             f"/{self.POSTGRES_DB}"
         )
+
+    @property
+    def public_key(self) -> str:
+        with open(BASE_DIR / "public.pem") as file:
+            return file.read()
+
+    @property
+    def private_key(self) -> str:
+        with open(BASE_DIR / "private.pem") as file:
+            return file.read()
 
     class Config:
         env_file = BASE_DIR / ".env"

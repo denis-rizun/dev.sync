@@ -17,3 +17,5 @@ class StatusEnum(StrEnum):
 class ColumnEnum(StrEnum):
     ID = "id"
     USERNAME = "username"
+    REVOKED = "revoked"
+    USER_ID = "user_id"

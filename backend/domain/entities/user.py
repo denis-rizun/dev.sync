@@ -9,7 +9,6 @@ class UserEntity:
     username: str | None = None
     mail: str | None = None
     password: str | None = None
-    location: str | None = None
     avatar: str | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None

@@ -11,6 +11,8 @@ RUN apt-get update  \
 COPY backend/ /app/backend/
 COPY .env /app/.env
 COPY alembic.ini /app/alembic.ini
+COPY public.pem /app/public.pem
+COPY private.pem /app/private.pem
 
 ENV PYTHONPATH=/app/
 
