@@ -1,16 +1,16 @@
-from typing import Type, Generic
+from typing import Generic
 from dataclasses import asdict
 
 from backend.domain.types import EntityType, ModelType
 
 
 class BaseMapper(Generic[EntityType, ModelType]):
-    ENTITY: Type[EntityType]
-    MODEL: Type[ModelType]
+    ENTITY: type[EntityType]
+    MODEL: type[ModelType]
 
     @classmethod
     def to_entity(cls, model: ModelType) -> EntityType:
-        data = {k: getattr(model, k) for k in model.__dict__.keys() if not k.startswith('_')}
+        data = {k: getattr(model, k) for k in model.__dict__ if not k.startswith('_')}
         return cls.ENTITY(**data)
 
     @classmethod

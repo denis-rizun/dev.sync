@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Generic, Type
+from typing import Any, Generic
 
 from backend.domain.enums.common import ColumnEnum
 from backend.domain.enums.repository import OrderByEnum
@@ -7,11 +7,11 @@ from backend.domain.types import ModelType, EntityType, MapperType
 
 
 class IRepository(ABC, Generic[ModelType, EntityType, MapperType]):
-    MODEL: Type[ModelType]
-    MAPPER: Type[MapperType]
+    MODEL: type[ModelType]
+    MAPPER: type[MapperType]
 
     @abstractmethod
-    async def create(self, entity: EntityType) -> ModelType:
+    async def create(self, entity: EntityType) -> EntityType:
         pass
 
     @abstractmethod
@@ -20,7 +20,7 @@ class IRepository(ABC, Generic[ModelType, EntityType, MapperType]):
             column: ColumnEnum,
             value: Any,
             is_many: bool = False
-    ) -> ModelType | list[ModelType] | None:
+    ) -> EntityType | list[EntityType] | None:
         pass
 
     @abstractmethod
@@ -33,15 +33,20 @@ class IRepository(ABC, Generic[ModelType, EntityType, MapperType]):
             limit: int | None = None,
             offset: int | None = None,
             options: list[Any] | None = None
-    ) -> ModelType | list[ModelType] | None:
+    ) -> EntityType | list[EntityType] | None:
         pass
 
     @abstractmethod
-    async def get_existed(self, column: ColumnEnum, value: Any) -> ModelType:
+    async def get_existed(self, column: ColumnEnum, value: Any) -> EntityType:
         pass
 
     @abstractmethod
-    async def update(self, column: ColumnEnum, value: Any, data: dict[ColumnEnum, Any]) -> ModelType:
+    async def update(
+            self,
+            column: ColumnEnum,
+            value: Any,
+            data: dict[ColumnEnum, Any]
+    ) -> EntityType:
         pass
 
     @abstractmethod
