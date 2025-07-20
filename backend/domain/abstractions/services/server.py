@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from backend.domain.dtos.service import ServerCreateDTO
+from backend.domain.dtos.server import ServerCreateDTO
 from backend.domain.entities.server import ServerEntity
 
 
@@ -21,4 +21,8 @@ class IServerService(ABC):
 
     @abstractmethod
     async def delete(self, id: UUID, user_id: UUID) -> None:
+        pass
+
+    @abstractmethod
+    async def retry(self, id: UUID, user_id: UUID) -> ...:
         pass

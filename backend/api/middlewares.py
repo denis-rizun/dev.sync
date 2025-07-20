@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from sqlalchemy.exc import SQLAlchemyError
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
@@ -18,7 +20,8 @@ class DatabaseMiddleware(BaseHTTPMiddleware):
         session = await container.session()
         try:
             response = await call_next(request)
-            await session.commit()
+            if request.method not in {"OPTIONS", "GET"}:
+                await session.commit()
             return response
         except SQLAlchemyError as e:
             await session.rollback()
@@ -65,8 +68,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
             token = auth_header.removeprefix("Bearer ").strip()
             try:
                 decoded_token = JWTHandler.decode_token(token)
-                request.state.user_id = decoded_token["sub"]
-                request.state.jti = decoded_token["jti"]
+                request.state.user_id = UUID(decoded_token["sub"])
                 return await call_next(request)
             except AuthenticationError as e:
                 return JSONResponse(

@@ -5,7 +5,7 @@ from backend.core.logger import Logger
 from backend.core.utils import Mapper
 from backend.domain.abstractions.repositories.server import IServerRepository
 from backend.domain.abstractions.services.server import IServerService
-from backend.domain.dtos.service import ServerCreateDTO
+from backend.domain.dtos.server import ServerCreateDTO
 from backend.domain.entities.server import ServerEntity
 from backend.domain.enums.common import ColumnEnum, ServerStatusEnum
 
@@ -61,3 +61,6 @@ class ServerService(IServerService):
 
         await self._server_repo.delete(column=ColumnEnum.ID, value=id)
         logger.info(f"[ServerService]: Deleted server: {id}")
+
+    async def retry(self, id: UUID, user_id: UUID) -> ...:
+        pass

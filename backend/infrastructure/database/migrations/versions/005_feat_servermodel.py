@@ -25,7 +25,7 @@ def upgrade() -> None:
         'server_status',
         postgresql.ENUM('ACTIVE', 'INACTIVE', name='serverstatusenum', create_type=False),
         nullable=False,
-        default='INACTIVE'
+        default='ACTIVE'
     ),
     sa.Column('user_id', sa.UUID(), nullable=False),
     sa.Column('ip', sa.String(), nullable=False),

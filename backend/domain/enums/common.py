@@ -20,3 +20,4 @@ class ColumnEnum(StrEnum):
     REVOKED = "revoked"
     USER_ID = "user_id"
     SERVER_STATUS = "server_status"
+    STATUS = "status"

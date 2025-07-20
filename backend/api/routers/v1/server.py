@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from starlette.requests import Request
 
 from backend.core.utils import Mapper
-from backend.domain.dtos.service import ServerCreateDTO
+from backend.domain.dtos.server import ServerCreateDTO
 from backend.infrastructure.dependencies.container import container
 from backend.infrastructure.schemas.server import ServerSchema, ServerCreateSchema
 

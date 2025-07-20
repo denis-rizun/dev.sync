@@ -4,6 +4,7 @@ from backend.core.config import config
 
 
 class DatabaseInitializer:
+
     @classmethod
     def initialize(cls, echo: bool = False, expire: bool = False) -> async_sessionmaker:
         engine = cls._create_engine(echo=echo)
@@ -23,6 +24,3 @@ class DatabaseInitializer:
     @classmethod
     def _create_session_pool(cls, engine: AsyncEngine, expire: bool) -> async_sessionmaker:
         return async_sessionmaker(bind=engine, expire_on_commit=expire)
-
-
-
