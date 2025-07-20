@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from backend.domain.dtos.webhook import WebhookCreateDTO
+from backend.domain.dtos.webhook import WebhookCreateDTO, WebhookUpdateDTO
 from backend.domain.entities.webhook import WebhookEntity
 
 
@@ -16,13 +16,18 @@ class IWebhookService(ABC):
         pass
 
     @abstractmethod
-    async def deactivate(self, id: UUID, user_id: UUID) -> WebhookEntity:
-        pass
-
-    @abstractmethod
     async def delete(self, id: UUID, user_id: UUID) -> None:
         pass
 
     @abstractmethod
     async def retry(self, id: UUID, user_id: UUID) -> ...:
+        pass
+
+    @abstractmethod
+    async def update(
+            self,
+            id: UUID,
+            user_id: UUID,
+            data: WebhookUpdateDTO
+    ) -> WebhookEntity:
         pass

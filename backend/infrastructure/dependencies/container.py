@@ -2,6 +2,7 @@ from dependency_injector.containers import DeclarativeContainer
 from dependency_injector.providers import Resource, Factory
 
 from backend.application.auth import AuthService
+from backend.application.history import HistoryService
 from backend.application.server import ServerService
 from backend.application.webhook import WebhookService
 from backend.infrastructure.database.initialisation import DatabaseInitializer
@@ -34,6 +35,7 @@ class Container(DeclarativeContainer):
         server_repo=server_repository,
         history_repo=history_repository
     )
+    history_service = Factory(HistoryService, history_repo=history_repository)
 
 
 container = Container()

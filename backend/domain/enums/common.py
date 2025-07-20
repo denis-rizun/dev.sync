@@ -21,3 +21,13 @@ class ColumnEnum(StrEnum):
     USER_ID = "user_id"
     SERVER_STATUS = "server_status"
     STATUS = "status"
+    REPOSITORY = "repository"
+    BRANCH = "branch"
+    KEY = "key"
+    SHELL = "shell"
+    NAME = "name"
+    IP = "ip"
+    PORT = "port"
+    ACCOUNT = "account"
+    PKEY = "pkey"
+

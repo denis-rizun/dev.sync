@@ -1,7 +1,8 @@
 from datetime import datetime
+from typing import Any
 from uuid import UUID
 
-from backend.domain.enums.common import ServerStatusEnum, StatusEnum
+from backend.domain.enums.common import ServerStatusEnum, StatusEnum, ColumnEnum
 from backend.domain.enums.webhook import WebhookSourceEnum
 from backend.infrastructure.schemas.base import DevSyncSchema
 
@@ -28,3 +29,13 @@ class WebhookCreateSchema(DevSyncSchema):
     shell: str
     source: WebhookSourceEnum
     server_id: UUID
+
+
+class WebhookUpdateSchema(DevSyncSchema):
+    status: StatusEnum | None = None
+    repository: str | None = None
+    key: str | None = None
+    branch: str | None = None
+    shell: str | None = None
+    source: WebhookSourceEnum | None = None
+    server_status: ServerStatusEnum | None = None

@@ -5,7 +5,7 @@ from backend.core.logger import Logger
 from backend.core.utils import Mapper
 from backend.domain.abstractions.repositories.server import IServerRepository
 from backend.domain.abstractions.services.server import IServerService
-from backend.domain.dtos.server import ServerCreateDTO
+from backend.domain.dtos.server import ServerCreateDTO, ServerUpdateDTO
 from backend.domain.entities.server import ServerEntity
 from backend.domain.enums.common import ColumnEnum, ServerStatusEnum
 
@@ -32,7 +32,7 @@ class ServerService(IServerService):
         logger.info(f"[ServerService]: Created server: {new_server!r}")
         return new_server
 
-    async def deactivate(self, id: UUID, user_id: UUID) -> ServerEntity:
+    async def update(self, id: UUID, user_id: UUID, data: ServerUpdateDTO) -> ServerEntity:
         existing = await self._server_repo.get(column=ColumnEnum.ID, value=id)
         if not existing:
             raise NotFoundError(message='Server not found')
@@ -40,15 +40,12 @@ class ServerService(IServerService):
         if str(existing.user_id) != str(user_id):
             raise PermissionDeniedError(message='Permission denied')
 
-        if existing.server_status == ServerStatusEnum.INACTIVE:
-            raise ConflictError(message='Server already inactive')
-
         updated_server = await self._server_repo.update(
             column=ColumnEnum.ID,
             value=existing.id,
-            data={ColumnEnum.SERVER_STATUS: ServerStatusEnum.INACTIVE}
+            data=data.to_raw()
         )
-        logger.info(f"[ServerService]: Deactivated server: {updated_server!r}")
+        logger.info(f"[ServerService]: Updated server: {updated_server!r}")
         return updated_server
 
     async def delete(self, id: UUID, user_id: UUID) -> None:

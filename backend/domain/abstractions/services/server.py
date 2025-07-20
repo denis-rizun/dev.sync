@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from uuid import UUID
 
-from backend.domain.dtos.server import ServerCreateDTO
+from backend.domain.dtos.server import ServerCreateDTO, ServerUpdateDTO
 from backend.domain.entities.server import ServerEntity
 
 
@@ -16,7 +16,7 @@ class IServerService(ABC):
         pass
 
     @abstractmethod
-    async def deactivate(self, id: UUID, user_id: UUID) -> ServerEntity:
+    async def update(self, id: UUID, user_id: UUID, data: ServerUpdateDTO) -> ServerEntity:
         pass
 
     @abstractmethod

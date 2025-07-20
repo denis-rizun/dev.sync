@@ -7,25 +7,17 @@ from backend.domain.abstractions.repositories.history import IHistoryRepository
 from backend.domain.abstractions.repositories.server import IServerRepository
 from backend.domain.abstractions.repositories.webhook import IWebhookRepository
 from backend.domain.abstractions.services.webhook import IWebhookService
-from backend.domain.dtos.webhook import WebhookCreateDTO
-from backend.domain.entities.history import HistoryEntity
+from backend.domain.dtos.webhook import WebhookCreateDTO, WebhookUpdateDTO
 from backend.domain.entities.webhook import WebhookEntity
 from backend.domain.enums.common import ColumnEnum, ServerStatusEnum, StatusEnum
-from backend.domain.enums.history import HistoryTriggerEnum
 
 logger = Logger.setup_logger(__name__)
 
 
 class WebhookService(IWebhookService):
-    def __init__(
-            self,
-            webhook_repo: IWebhookRepository,
-            server_repo: IServerRepository,
-            history_repo: IHistoryRepository
-    ) -> None:
+    def __init__(self, webhook_repo: IWebhookRepository, server_repo: IServerRepository) -> None:
         self._webhook_repo = webhook_repo
         self._server_repo = server_repo
-        self._history_repo = history_repo
 
     async def get_webhooks(self, user_id: UUID) -> list[WebhookEntity | None]:
         webhooks = await self._webhook_repo.get(
@@ -46,25 +38,6 @@ class WebhookService(IWebhookService):
         new_webhook = await self._webhook_repo.create(entity=entity)
         logger.info(f"[WebhookService]: Created webhook: {new_webhook!r}")
         return new_webhook
-
-    async def deactivate(self, id: UUID, user_id: UUID) -> WebhookEntity:
-        existing = await self._webhook_repo.get(column=ColumnEnum.ID, value=id)
-        if not existing:
-            raise NotFoundError(message='Webhook not found')
-
-        if str(existing.user_id) != str(user_id):
-            raise PermissionDeniedError(message='Permission denied')
-
-        if existing.server_status == ServerStatusEnum.INACTIVE:
-            raise ConflictError(message='Webhook already inactive')
-
-        updated_server = await self._webhook_repo.update(
-            column=ColumnEnum.ID,
-            value=existing.id,
-            data={ColumnEnum.SERVER_STATUS: ServerStatusEnum.INACTIVE}
-        )
-        logger.info(f"[WebhookService]: Deactivated webhook: {updated_server!r}")
-        return updated_server
 
     async def delete(self, id: UUID, user_id: UUID) -> None:
         existing = await self._webhook_repo.get(column=ColumnEnum.ID, value=id)
@@ -98,3 +71,19 @@ class WebhookService(IWebhookService):
 
         logger.info(f"[WebhookService]: Retry webhook: {existing!r}")
         return existing
+
+    async def update(self, id: UUID, user_id: UUID, data: WebhookUpdateDTO) -> WebhookEntity:
+        existing = await self._webhook_repo.get(column=ColumnEnum.ID, value=id)
+        if not existing:
+            raise NotFoundError(message='Webhook not found')
+
+        if str(existing.user_id) != str(user_id):
+            raise PermissionDeniedError(message='Permission denied')
+
+        updated_webhook = await self._webhook_repo.update(
+            column=ColumnEnum.ID,
+            value=id,
+            data=data.to_raw()
+        )
+        logger.info(f"[WebhookService]: Updated webhook: {updated_webhook!r}")
+        return updated_webhook

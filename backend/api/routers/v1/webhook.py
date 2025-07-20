@@ -4,9 +4,13 @@ from fastapi import APIRouter
 from starlette.requests import Request
 
 from backend.core.utils import Mapper
-from backend.domain.dtos.webhook import WebhookCreateDTO
+from backend.domain.dtos.webhook import WebhookCreateDTO, WebhookUpdateDTO
 from backend.infrastructure.dependencies.container import container
-from backend.infrastructure.schemas.webhook import WebhookCreateSchema, WebhookSchema
+from backend.infrastructure.schemas.webhook import (
+    WebhookCreateSchema,
+    WebhookSchema,
+    WebhookUpdateSchema
+)
 
 webhook_router = APIRouter(prefix="/v1/webhooks", tags=["Webhook"])
 
@@ -27,9 +31,10 @@ async def get_webhooks(request: Request) -> list[WebhookSchema]:
 
 
 @webhook_router.patch(path="/{id}", response_model=WebhookSchema, status_code=200)
-async def deactivate_webhook(request: Request, id: UUID) -> WebhookSchema:
+async def update(request: Request, id: UUID, data: WebhookUpdateSchema) -> WebhookSchema:
+    dto = Mapper.to_dto(dto=WebhookUpdateDTO, schema=data)
     service = await container.webhook_service()
-    result = await service.deactivate(id=id, user_id=request.state.user_id)
+    result = await service.update(id=id, user_id=request.state.user_id, data=dto)
     return Mapper.to_schema(schema=WebhookSchema, dto=result)
 
 

@@ -4,9 +4,9 @@ from fastapi import APIRouter
 from starlette.requests import Request
 
 from backend.core.utils import Mapper
-from backend.domain.dtos.server import ServerCreateDTO
+from backend.domain.dtos.server import ServerCreateDTO, ServerUpdateDTO
 from backend.infrastructure.dependencies.container import container
-from backend.infrastructure.schemas.server import ServerSchema, ServerCreateSchema
+from backend.infrastructure.schemas.server import ServerSchema, ServerCreateSchema, ServerUpdateSchema
 
 server_router = APIRouter(prefix="/v1/servers", tags=["Server"])
 
@@ -27,9 +27,10 @@ async def create_server(request: Request, data: ServerCreateSchema) -> ServerSch
 
 
 @server_router.patch(path="/{id}", response_model=ServerSchema, status_code=200)
-async def deactivate(request: Request, id: UUID) -> ServerSchema:
+async def update(request: Request, id: UUID, data: ServerUpdateSchema) -> ServerSchema:
+    dto = Mapper.to_dto(dto=ServerUpdateDTO, schema=data)
     service = await container.server_service()
-    result = await service.deactivate(id=id, user_id=request.state.user_id)
+    result = await service.update(id=id, user_id=request.state.user_id, data=dto)
     return Mapper.to_schema(schema=ServerSchema, dto=result)
 
 

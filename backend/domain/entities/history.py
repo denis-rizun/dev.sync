@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID
 
-from backend.domain.enums.common import StatusEnum, ServerStatusEnum
+from backend.domain.enums.common import StatusEnum
 from backend.domain.enums.history import HistoryTriggerEnum
 
 
