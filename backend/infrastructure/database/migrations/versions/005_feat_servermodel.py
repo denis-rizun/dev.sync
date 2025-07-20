@@ -1,4 +1,4 @@
-"""feat ServerModel
+"""feat ServerModel;
 
 Revision ID: cd64b851179c
 Revises: e3a9c73a9af1

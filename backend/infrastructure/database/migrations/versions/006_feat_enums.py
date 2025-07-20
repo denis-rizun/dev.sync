@@ -1,4 +1,4 @@
-"""feat ServerStatusEnum, WebhookSourceEnum;
+"""feat ServerStatusEnum, WebhookSourceEnum, HistoryTriggerEnum;
 
 Revision ID: ab37j3dk932j
 Revises: cd64b851179c
@@ -29,6 +29,8 @@ def upgrade() -> None:
     status_enum.create(op.get_bind(), checkfirst=True)
     source_enum = postgresql.ENUM('GITHUB', 'GITLAB', name='webhooksourceenum')
     source_enum.create(op.get_bind(), checkfirst=True)
+    trigger_enum = postgresql.ENUM('MANUAL', 'SCHEDULED', 'AUTO', name='historytriggerenum')
+    trigger_enum.create(op.get_bind(), checkfirst=True)
 
 
 def downgrade() -> None:
@@ -36,3 +38,5 @@ def downgrade() -> None:
     status_enum.drop(op.get_bind(), checkfirst=True)
     source_enum = postgresql.ENUM(name='webhooksourceenum')
     source_enum.drop(op.get_bind(), checkfirst=True)
+    trigger_enum = postgresql.ENUM(name='historytriggerenum')
+    trigger_enum.drop(op.get_bind(), checkfirst=True)

@@ -1,4 +1,4 @@
-"""feat WebhookModel
+"""feat WebhookModel;
 
 Revision ID: 6b8d78ca8f55
 Revises: ab37j3dk932j

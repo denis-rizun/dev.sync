@@ -22,7 +22,3 @@ class IServerService(ABC):
     @abstractmethod
     async def delete(self, id: UUID, user_id: UUID) -> None:
         pass
-
-    @abstractmethod
-    async def retry(self, id: UUID, user_id: UUID) -> ...:
-        pass

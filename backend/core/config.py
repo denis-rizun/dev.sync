@@ -28,6 +28,17 @@ class DevSyncConfig(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int
     REFRESH_TOKEN_EXPIRE_MINUTES: int
 
+    CELERY_BROKER_URL: str
+    CELERY_BACKEND_URL: str
+    CELERY_TASK_TRACK_STARTED: bool
+    CELERY_TASK_TIME_LIMIT: int
+    CELERY_TASK_SOFT_TIME_LIMIT: int
+    CELERY_TIMEZONE: str
+    CELERY_ENABLE_UTC: bool
+
+    INNER_REDIS_PORT: int
+    OUTER_REDIS_PORT: int
+
     @property
     def database_connection(self) -> str:
         return (

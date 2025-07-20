@@ -1,4 +1,4 @@
-"""feat UserModel
+"""feat UserModel;
 
 Revision ID: c8a3f91411c3
 Revises: 5c7b5713b6d5

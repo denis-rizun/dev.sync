@@ -61,6 +61,3 @@ class ServerService(IServerService):
 
         await self._server_repo.delete(column=ColumnEnum.ID, value=id)
         logger.info(f"[ServerService]: Deleted server: {id}")
-
-    async def retry(self, id: UUID, user_id: UUID) -> ...:
-        pass

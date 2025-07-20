@@ -1,5 +1,7 @@
+from uuid import UUID
+
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import mapped_column, Mapped
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 from backend.domain.enums.common import StatusEnum, ServerStatusEnum
 from backend.domain.enums.webhook import WebhookSourceEnum
@@ -18,5 +20,10 @@ class WebhookModel(Base, IDMixin, TimestampMixin):
     shell: Mapped[str]
     source: Mapped[WebhookSourceEnum]
 
-    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    server_id: Mapped[int] = mapped_column(ForeignKey('servers.id'))
+    user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"))
+    user: Mapped["UserModel"] = relationship(back_populates="webhooks")  # noqa
+
+    server_id: Mapped[UUID] = mapped_column(ForeignKey("servers.id"))
+    server: Mapped["ServerModel"] = relationship(back_populates="webhooks")  # noqa
+
+    histories: Mapped[list["HistoryModel"]] = relationship(back_populates="webhook")  # noqa

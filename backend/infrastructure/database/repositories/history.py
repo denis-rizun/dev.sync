@@ -5,7 +5,7 @@ from backend.infrastructure.database.repositories.base import BaseRepository
 from backend.infrastructure.mappers.history import HistoryMapper
 
 
-class SessionRepository(
+class HistoryRepository(
     BaseRepository[HistoryModel, HistoryEntity, HistoryMapper],
     IHistoryRepository[HistoryModel, HistoryEntity, HistoryMapper]
 ):

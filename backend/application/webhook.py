@@ -89,14 +89,6 @@ class WebhookService(IWebhookService):
         if existing.server_status == ServerStatusEnum.INACTIVE:
             raise ConflictError(message='Webhook already inactive')
 
-        history_entity = HistoryEntity(
-            shell=existing.shell,
-            trigger_type=HistoryTriggerEnum.MANUAL,
-            webhook_id=existing.id,
-            server_id=existing.server_id,
-        )
-        await self._history_repo.create(entity=history_entity)
-
         if existing.status != StatusEnum.WAITING:
             existing = await self._webhook_repo.update(
                 column=ColumnEnum.ID,

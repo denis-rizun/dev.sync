@@ -41,4 +41,7 @@ async def delete_webhook(request: Request, id: UUID) -> None:
 
 @webhook_router.post(path="/{id}", response_model=WebhookSchema, status_code=200)
 async def retry_webhook(request: Request, id: UUID) -> WebhookSchema:
-    ...
+    service = await container.webhook_service()
+    result = await service.retry(id=id, user_id=request.state.user_id)
+    return Mapper.to_schema(schema=WebhookSchema, dto=result)
+

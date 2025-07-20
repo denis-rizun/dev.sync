@@ -10,8 +10,7 @@ from backend.domain.enums.history import HistoryTriggerEnum
 class HistoryEntity:
     id: UUID | None = None
     status: StatusEnum | None = None
-    server_status: ServerStatusEnum | None = None
-    shell: str | None = None
+    output: str | None = None
     trigger_type: HistoryTriggerEnum | None = None
     webhook_id: UUID | None = None
     server_id: UUID | None = None

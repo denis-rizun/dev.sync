@@ -1,4 +1,4 @@
-"""feat SessionModel; update UserModel(del location)
+"""feat SessionModel; update UserModel(del location);
 
 Revision ID: cd7de57d8a1c
 Revises: c8a3f91411c3
