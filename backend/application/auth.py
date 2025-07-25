@@ -73,11 +73,11 @@ class AuthService(IAuthService):
         logger.info(f"[AuthService]: Logged in user: {new_session!r}")
         return Mapper.to_entity(entity=TokenEntity, dto=token_dto)
 
-    async def logout(self, user_id: UUID, token: str | None) -> None:
+    async def logout(self, id: UUID, token: str | None) -> None:
         if not token:
             raise AuthenticationError(message="Refresh token missing")
 
-        existing = await self._session_repo.get_active_session(user_id=user_id, token=token)
+        existing = await self._session_repo.get_active_session(user_id=id, token=token)
         if not existing:
             raise NotFoundError(message='Active session not found')
 
@@ -86,7 +86,7 @@ class AuthService(IAuthService):
             value=existing.id,
             data={ColumnEnum.REVOKED: True}
         )
-        logger.info(f"[AuthService]: Logged out user: {user_id}")
+        logger.info(f"[AuthService]: Logged out user: {id}")
 
     async def refresh_access_token(self, token: str | None) -> TokenEntity:
         if not token:

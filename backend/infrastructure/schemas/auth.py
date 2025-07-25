@@ -1,4 +1,5 @@
 from typing import Self, Any
+from uuid import uuid4
 
 from pydantic import EmailStr, model_validator
 
@@ -14,7 +15,7 @@ class RegistrationSchema(DevSyncSchema):
     @model_validator(mode="before")
     def fill_username_from_mail(cls, data: dict[str, Any]):  # noqa
         if data.get("username") is None and data.get("mail"):
-            data["username"] = data["mail"].split("@")[0]
+            data["username"] = f'{data["mail"].split("@")[0]}-{uuid4()!s}'
         return data
 
     @model_validator(mode="after")

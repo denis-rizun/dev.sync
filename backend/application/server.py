@@ -1,13 +1,13 @@
 from uuid import UUID
 
-from backend.core.exceptions import NotFoundError, PermissionDeniedError, ConflictError
+from backend.core.exceptions import NotFoundError, PermissionDeniedError
 from backend.core.logger import Logger
 from backend.core.utils import Mapper
 from backend.domain.abstractions.repositories.server import IServerRepository
 from backend.domain.abstractions.services.server import IServerService
 from backend.domain.dtos.server import ServerCreateDTO, ServerUpdateDTO
 from backend.domain.entities.server import ServerEntity
-from backend.domain.enums.common import ColumnEnum, ServerStatusEnum
+from backend.domain.enums.common import ColumnEnum
 
 logger = Logger.setup_logger(__name__)
 
@@ -57,4 +57,4 @@ class ServerService(IServerService):
             raise PermissionDeniedError(message='Permission denied')
 
         await self._server_repo.delete(column=ColumnEnum.ID, value=id)
-        logger.info(f"[ServerService]: Deleted server: {id}")
+        logger.info(f"[ServerService]: Deleted server: <Server(id='{id}')>")

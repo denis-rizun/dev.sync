@@ -31,3 +31,10 @@ class ColumnEnum(StrEnum):
     ACCOUNT = "account"
     PKEY = "pkey"
 
+
+class RequestMethodEnum(StrEnum):
+    GET = "get"
+    POST = "post"
+    PUT = "put"
+    PATCH = "patch"
+    DELETE = "delete"

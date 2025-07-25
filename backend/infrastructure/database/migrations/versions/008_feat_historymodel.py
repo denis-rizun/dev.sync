@@ -33,11 +33,7 @@ def upgrade() -> None:
         nullable=False,
     ),
     sa.Column('output', sa.String(), nullable=False),
-    sa.Column(
-        'trigger_type',
-        postgresql.ENUM('MANUAL', 'SCHEDULED', 'AUTO', name='historytriggerenum', create_type=False),
-        nullable=False
-    ),
+    sa.Column('pusher', sa.String(), nullable=True),
     sa.Column('webhook_id', sa.UUID(), nullable=False),
     sa.Column('server_id', sa.UUID(), nullable=False),
     sa.Column('id', sa.UUID(), nullable=False),

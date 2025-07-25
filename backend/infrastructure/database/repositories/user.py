@@ -1,4 +1,4 @@
-from sqlalchemy import select
+from sqlalchemy import select, or_
 
 from backend.domain.abstractions.repositories import IUserRepository
 from backend.domain.entities.user import UserEntity
@@ -14,13 +14,26 @@ class UserRepository(
     MODEL = UserModel
     MAPPER = UserMapper
 
-    async def get_by_username_or_mail(self, username: str, mail: str) -> UserModel | None:
-        stmt = (
-            select(self.MODEL)
-            .where((self.MODEL.username == username) | (self.MODEL.mail == mail))
-        )
+    async def get_by_username_or_mail(
+            self,
+            username: str | None,
+            mail: str | None
+    ) -> UserEntity | None:
+        conditions = []
+
+        if username is not None:
+            conditions.append(self.MODEL.username == username)
+
+        if mail is not None:
+            conditions.append(self.MODEL.mail == mail)
+
+        if not conditions:
+            return None
+
+        stmt = select(self.MODEL).where(or_(*conditions))
         result = await self.session.execute(stmt)
         found = result.scalar_one_or_none()
+
         if found:
             return self.MAPPER.to_entity(found)
 

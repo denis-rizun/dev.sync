@@ -1,9 +1,13 @@
 from dataclasses import dataclass
+from uuid import UUID
 
-from backend.domain.dtos.base import BaseUpdateDTO
 from backend.domain.enums.common import StatusEnum
 
 
 @dataclass
-class HistoryUpdateDTO(BaseUpdateDTO):
+class HistoryCreateDTO:
+    output: str
+    pusher: str
+    webhook_id: UUID
+    server_id: UUID
     status: StatusEnum | None = None

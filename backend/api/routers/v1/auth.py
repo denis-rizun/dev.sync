@@ -39,7 +39,6 @@ async def logout(request: Request, response: Response) -> None:
     response.delete_cookie(key=JWTTokenType.REFRESH)
 
 
-
 @auth_router.post(path="/token/", response_model=TokenSchema, status_code=200)
 async def refresh_access_token(request: Request) -> TokenSchema:
     service = await container.auth_service()

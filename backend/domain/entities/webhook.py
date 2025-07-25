@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from uuid import UUID
 
+from backend.domain.entities.server import ServerEntity
 from backend.domain.enums.common import ServerStatusEnum, StatusEnum
 from backend.domain.enums.webhook import WebhookSourceEnum
 
@@ -23,3 +24,11 @@ class WebhookEntity:
 
     def __repr__(self) -> str:
         return f"<Webhook(id='{self.id}')>"
+
+
+@dataclass
+class WebhookExtendedEntity(WebhookEntity):
+    server: ServerEntity | None = None
+
+    def __repr__(self) -> str:
+        return f"<WebhookExtended(id='{self.id}')>"

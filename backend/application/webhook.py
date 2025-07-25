@@ -1,15 +1,16 @@
+from dataclasses import asdict
 from uuid import UUID
 
 from backend.core.exceptions import NotFoundError, PermissionDeniedError, ConflictError
 from backend.core.logger import Logger
 from backend.core.utils import Mapper
-from backend.domain.abstractions.repositories.history import IHistoryRepository
 from backend.domain.abstractions.repositories.server import IServerRepository
 from backend.domain.abstractions.repositories.webhook import IWebhookRepository
 from backend.domain.abstractions.services.webhook import IWebhookService
-from backend.domain.dtos.webhook import WebhookCreateDTO, WebhookUpdateDTO
-from backend.domain.entities.webhook import WebhookEntity
-from backend.domain.enums.common import ColumnEnum, ServerStatusEnum, StatusEnum
+from backend.domain.dtos.webhook import WebhookCreateDTO, WebhookUpdateDTO, WebhookCallDTO
+from backend.domain.entities.webhook import WebhookEntity, WebhookExtendedEntity
+from backend.domain.enums.common import ColumnEnum, ServerStatusEnum
+from backend.infrastructure.tasks.callable.webhook import call_webhook_shell
 
 logger = Logger.setup_logger(__name__)
 
@@ -47,12 +48,11 @@ class WebhookService(IWebhookService):
         if str(existing.user_id) != str(user_id):
             raise PermissionDeniedError(message='Permission denied')
 
-
         await self._webhook_repo.delete(column=ColumnEnum.ID, value=id)
         logger.info(f"[WebhookService]: Deleted server: {id}")
 
-    async def retry(self, id: UUID, user_id: UUID) -> WebhookEntity:
-        existing = await self._webhook_repo.get(column=ColumnEnum.ID, value=id)
+    async def retry(self, key: str, user_id: UUID) -> WebhookExtendedEntity:
+        existing = await self._webhook_repo.get_with_server(key=key)
         if not existing:
             raise NotFoundError(message='Webhook not found')
 
@@ -62,13 +62,18 @@ class WebhookService(IWebhookService):
         if existing.server_status == ServerStatusEnum.INACTIVE:
             raise ConflictError(message='Webhook already inactive')
 
-        if existing.status != StatusEnum.WAITING:
-            existing = await self._webhook_repo.update(
-                column=ColumnEnum.ID,
-                value=existing.id,
-                data={ColumnEnum.STATUS: StatusEnum.WAITING}
-            )
+        # if existing.status != StatusEnum.WAITING:
+        #     existing = await self._webhook_repo.update(
+        #         column=ColumnEnum.ID,
+        #         value=existing.id,
+        #         data={ColumnEnum.STATUS: StatusEnum.WAITING}
+        #     )
 
+        server = asdict(existing.server)
+        webhook = asdict(existing)
+        webhook["server"] = server
+
+        call_webhook_shell.delay(webhook, {})
         logger.info(f"[WebhookService]: Retry webhook: {existing!r}")
         return existing
 
@@ -87,3 +92,21 @@ class WebhookService(IWebhookService):
         )
         logger.info(f"[WebhookService]: Updated webhook: {updated_webhook!r}")
         return updated_webhook
+
+    async def call(self, key: str, data: WebhookCallDTO) -> None:
+        existing = await self._webhook_repo.get_with_server(key=key)
+        if not existing:
+            raise NotFoundError(message='Webhook not found')
+
+        if existing.branch != data.get_repo_branch():
+            raise ConflictError(message='Webhook branch does not match')
+
+        if existing.repository != data.get_repo_name():
+            raise ConflictError(message='Webhook repo does not match')
+
+        server = asdict(existing.server)
+        webhook = asdict(existing)
+        webhook["server"] = server
+
+        call_webhook_shell.delay(webhook, asdict(data))
+        logger.info(f"[WebhookService]: Added webhook to queue: {existing!r}")

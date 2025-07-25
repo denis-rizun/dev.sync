@@ -26,7 +26,6 @@ class ServerCreateSchema(DevSyncSchema):
 class ServerUpdateSchema(DevSyncSchema):
     name: str | None = None
     server_status: ServerStatusEnum | None = None
-    user_id: UUID | None = None
     ip: str | None = None
     port: int | None = None
     account: str | None = None

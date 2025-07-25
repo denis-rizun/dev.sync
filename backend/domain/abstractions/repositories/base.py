@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 from typing import Any, Generic
 
 from backend.domain.enums.common import ColumnEnum
-from backend.domain.enums.repository import OrderByEnum
 from backend.domain.types import ModelType, EntityType, MapperType
 
 
@@ -20,19 +19,6 @@ class IRepository(ABC, Generic[ModelType, EntityType, MapperType]):
             column: ColumnEnum,
             value: Any,
             is_many: bool = False
-    ) -> EntityType | list[EntityType] | None:
-        pass
-
-    @abstractmethod
-    async def get_filtered(
-            self,
-            filters: dict[ColumnEnum, Any],
-            is_many: bool = False,
-            unique: bool = False,
-            order_by: OrderByEnum | None = None,
-            limit: int | None = None,
-            offset: int | None = None,
-            options: list[Any] | None = None
     ) -> EntityType | list[EntityType] | None:
         pass
 

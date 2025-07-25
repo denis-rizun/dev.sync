@@ -4,6 +4,7 @@ from dependency_injector.providers import Resource, Factory
 from backend.application.auth import AuthService
 from backend.application.history import HistoryService
 from backend.application.server import ServerService
+from backend.application.session import SessionService
 from backend.application.webhook import WebhookService
 from backend.infrastructure.database.initialisation import DatabaseInitializer
 from backend.infrastructure.database.repositories.history import HistoryRepository
@@ -33,9 +34,8 @@ class Container(DeclarativeContainer):
         WebhookService,
         webhook_repo=webhook_repository,
         server_repo=server_repository,
-        history_repo=history_repository
     )
     history_service = Factory(HistoryService, history_repo=history_repository)
-
+    session_service = Factory(SessionService, session_repo=session_repository)
 
 container = Container()

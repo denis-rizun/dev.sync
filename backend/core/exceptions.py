@@ -3,7 +3,7 @@ class DevSyncError(Exception):
         super().__init__(message)
 
 
-# ----------------- DATABASE -----------------
+# ----------------- DataBase -----------------
 class DatabaseError(DevSyncError):
     pass
 
@@ -44,4 +44,9 @@ class PermissionDeniedError(AuthenticationError):
 
 # ----------------- BusinessLogic -----------------
 class ConflictError(DevSyncError):
+    pass
+
+
+# ----------------- HTTP -----------------
+class RequesterError(DevSyncError):
     pass

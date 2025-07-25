@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from backend.domain.enums.common import ServerStatusEnum, StatusEnum, ColumnEnum
+from backend.domain.enums.common import ServerStatusEnum, StatusEnum
 from backend.domain.enums.webhook import WebhookSourceEnum
 from backend.infrastructure.schemas.base import DevSyncSchema
 
@@ -39,3 +39,34 @@ class WebhookUpdateSchema(DevSyncSchema):
     shell: str | None = None
     source: WebhookSourceEnum | None = None
     server_status: ServerStatusEnum | None = None
+
+
+class PushUserDataSchema(DevSyncSchema):
+    name: str | None = None
+    username: str | None = None
+    email: str | None = None
+
+
+class PushDataSchema(DevSyncSchema):
+    repository: dict[str, Any] = None
+    ref: str | None = None
+    user: PushUserDataSchema | None = None
+
+
+class RepositorySchema(DevSyncSchema):
+    name: str | None = None
+
+
+class PusherSchema(DevSyncSchema):
+    name: str | None = None
+    username: str | None = None
+    email: str | None = None
+
+
+class WebhookCallSchema(DevSyncSchema):
+    repository: RepositorySchema | None = None
+    push_data: PushDataSchema| None = None
+    ref: str | None = None
+    pusher: PusherSchema | None = None
+    user_name: str | None = None
+    user_email: str | None = None

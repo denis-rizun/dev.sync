@@ -4,12 +4,13 @@ from fastapi import APIRouter
 from starlette.requests import Request
 
 from backend.core.utils import Mapper
-from backend.domain.dtos.webhook import WebhookCreateDTO, WebhookUpdateDTO
+from backend.domain.dtos.webhook import WebhookCreateDTO, WebhookUpdateDTO, WebhookCallDTO
 from backend.infrastructure.dependencies.container import container
 from backend.infrastructure.schemas.webhook import (
     WebhookCreateSchema,
     WebhookSchema,
-    WebhookUpdateSchema
+    WebhookUpdateSchema,
+    WebhookCallSchema
 )
 
 webhook_router = APIRouter(prefix="/v1/webhooks", tags=["Webhook"])
@@ -44,9 +45,15 @@ async def delete_webhook(request: Request, id: UUID) -> None:
     await service.delete(id=id, user_id=request.state.user_id)
 
 
-@webhook_router.post(path="/{id}", response_model=WebhookSchema, status_code=200)
-async def retry_webhook(request: Request, id: UUID) -> WebhookSchema:
+@webhook_router.post(path="/{key}", response_model=None, status_code=204)
+async def retry_webhook(request: Request, key: str) -> None:
     service = await container.webhook_service()
-    result = await service.retry(id=id, user_id=request.state.user_id)
+    result = await service.retry(key=key, user_id=request.state.user_id)
     return Mapper.to_schema(schema=WebhookSchema, dto=result)
 
+
+@webhook_router.post(path="/call/{key}", response_model=None, status_code=204)
+async def call_webhook(key: str, data: WebhookCallSchema) -> None:
+    dto = Mapper.to_dto(dto=WebhookCallDTO, schema=data)
+    service = await container.webhook_service()
+    await service.call(key=key, data=dto)

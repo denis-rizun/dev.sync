@@ -1,17 +1,21 @@
 from uuid import UUID
 
 from backend.domain.enums.common import StatusEnum
-from backend.domain.enums.history import HistoryTriggerEnum
 from backend.infrastructure.schemas.base import DevSyncSchema
 
 
 class HistorySchema(DevSyncSchema):
     status: StatusEnum
     output: str
-    trigger_type: HistoryTriggerEnum
+    pusher: str | None
     webhook_id: UUID
     server_id: UUID
 
 
-class HistoryUpdateSchema(DevSyncSchema):
+class HistoryCreateSchema(DevSyncSchema):
     status: StatusEnum | None = None
+    output: str
+    pusher: str | None
+    webhook_id: UUID
+    server_id: UUID
+

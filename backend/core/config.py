@@ -1,4 +1,5 @@
 from pathlib import Path
+from uuid import UUID
 
 from pydantic_settings import BaseSettings
 
@@ -38,6 +39,9 @@ class DevSyncConfig(BaseSettings):
 
     INNER_REDIS_PORT: int
     OUTER_REDIS_PORT: int
+
+    CELERY_AUTH_TOKEN: UUID
+    CELERY_AUTH_USER_ID: UUID
 
     @property
     def database_connection(self) -> str:

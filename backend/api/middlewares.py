@@ -5,7 +5,9 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 from starlette.requests import Request
 from starlette.responses import Response, JSONResponse
 
+from backend.core.config import config
 from backend.core.exceptions import AuthenticationError
+from backend.domain.enums.token import JWTTokenType
 from backend.infrastructure.dependencies.container import container
 from backend.infrastructure.security.jwt_handler import JWTHandler
 
@@ -76,6 +78,11 @@ class AuthMiddleware(BaseHTTPMiddleware):
                     content={"detail": str(e)}
                 )
         else:
+            dev_token = request.cookies.get(JWTTokenType.DEV_TOKEN.value)
+            if dev_token and dev_token == str(config.CELERY_AUTH_TOKEN):
+                request.state.user_id = config.CELERY_AUTH_USER_ID
+                return await call_next(request)
+
             return JSONResponse(
                 status_code=403,
                 content={"detail": "Not authenticated"},
@@ -90,5 +97,6 @@ class AuthMiddleware(BaseHTTPMiddleware):
             request.url.path.endswith("registration/") or
             request.url.path.endswith("login/") or
             request.url.path.endswith("token/") or
-            request.url.path.endswith("health/")
+            request.url.path.endswith("health/") or
+            request.url.path.startswith("/call")
         )

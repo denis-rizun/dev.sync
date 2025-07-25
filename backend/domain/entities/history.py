@@ -3,7 +3,6 @@ from datetime import datetime
 from uuid import UUID
 
 from backend.domain.enums.common import StatusEnum
-from backend.domain.enums.history import HistoryTriggerEnum
 
 
 @dataclass
@@ -11,7 +10,7 @@ class HistoryEntity:
     id: UUID | None = None
     status: StatusEnum | None = None
     output: str | None = None
-    trigger_type: HistoryTriggerEnum | None = None
+    pusher: str | None = None
     webhook_id: UUID | None = None
     server_id: UUID | None = None
     created_at: datetime | None = None
