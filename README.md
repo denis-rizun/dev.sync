@@ -13,7 +13,7 @@ This approach ensures that the final documentation will be accurate, up-to-date,
 This project is designed to **automate continuous delivery (CD) to a remote server**. Its main goal is to streamline and speed up the deployment of applications by providing a stable and secure way to deliver changes to production or test environments.
 
 **Key features:**
-- Authorization using JWT and dev tokens.
+- Authorization using JWT.
 - Fully asynchronous stack: FastAPI + SQLAlchemy (async).
 - Extensible architecture based on **Domain-Driven Design (DDD)** principles.
 - Ready for integration with Celery for background task processing.
