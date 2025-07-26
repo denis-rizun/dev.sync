@@ -1,10 +1,10 @@
 from fastapi import FastAPI
-from starlette.middleware.cors import CORSMiddleware
+from fastapi.middleware.cors import CORSMiddleware
 
+from backend.api.exception_handlers import ExceptionHandler
+from backend.api.middlewares import DatabaseMiddleware, AuthMiddleware
 from backend.api.routers import routers
 from backend.core.config import config
-from backend.api.exception_handlers import ExceptionHandler
-from backend.api.middlewares import DatabaseMiddleware, RequestMetaMiddleware, AuthMiddleware
 from backend.core.openapi import OpenAPIConfigurator
 
 app = FastAPI(root_path="/api")
@@ -16,7 +16,6 @@ app.add_middleware(
     allow_headers=config.ALLOW_HEADERS,
 )
 app.add_middleware(middleware_class=DatabaseMiddleware)
-app.add_middleware(middleware_class=RequestMetaMiddleware)
 app.add_middleware(middleware_class=AuthMiddleware)
 
 for router in routers:

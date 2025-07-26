@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from starlette.requests import Request
-from starlette.responses import Response
+from fastapi.requests import Request
+from fastapi.responses import Response
 
 from backend.core.utils import Mapper
 from backend.domain.dtos.auth import RegistrationDTO, LoginDTO

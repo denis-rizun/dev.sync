@@ -7,8 +7,8 @@ Create Date: 2025-07-20 12:25:44.396155
 """
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 from sqlalchemy.dialects import postgresql
 
 revision: str = '6b8d78ca8f55'

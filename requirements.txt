@@ -1,37 +1,36 @@
-# ------------ FastAPI ------------
+# ------------ FastAPI & ASGI ------------
 fastapi==0.115.11
+starlette==0.47.2
 uvicorn==0.34.0
 
-# ------------ Pydantic ------------
+# ------------ Pydantic & Settings ------------
 pydantic==2.11.7
 pydantic[email]==2.11.7
 pydantic-settings==2.10.1
 
-# ------------ Database(postgres) ------------
+# ------------ Database (PostgreSQL) ------------
 sqlalchemy==2.0.3
 asyncpg==0.30.0
 psycopg2-binary==2.9.10
 greenlet==3.1.1
 alembic==1.15.2
 
-# ------------ Auth ------------
+# ------------ Authentication & Security ------------
 passlib==1.7.4
 pyjwt==2.10.1
 cryptography==45.0.5
 bcrypt==4.3.0
 
-# ------------ Testing ------------
+# ------------ Task Queue & Broker ------------
+celery[redis]==5.5.3
+
+# ------------ Testing & Linting ------------
 pytest==8.3.5
 pytest-asyncio==0.25.3
-
-# ------------ Code Linting ------------
 ruff==0.11.9
 
-# ------------ Other stuffs ------------
+# ------------ Utilities & Other ------------
 colorlog==6.9.0
 dependency_injector==4.48.1
 requests==2.32.4
 paramiko==3.5.1
-
-# ------------ Celery ------------
-celery[redis]==5.5.3

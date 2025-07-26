@@ -1,5 +1,5 @@
-from typing import Generic
 from dataclasses import asdict
+from typing import Generic
 
 from backend.domain.types import EntityType, ModelType
 

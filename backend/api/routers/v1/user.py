@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from starlette.requests import Request
+from fastapi.requests import Request
 
 from backend.core.utils import Mapper
 from backend.infrastructure.dependencies.container import container

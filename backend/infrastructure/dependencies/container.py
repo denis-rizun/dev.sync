@@ -5,13 +5,13 @@ from backend.application.auth import AuthService
 from backend.application.history import HistoryService
 from backend.application.server import ServerService
 from backend.application.session import SessionService
+from backend.application.user import UserService
 from backend.application.webhook import WebhookService
 from backend.infrastructure.database.initialisation import DatabaseInitializer
 from backend.infrastructure.database.repositories.history import HistoryRepository
 from backend.infrastructure.database.repositories.server import ServerRepository
 from backend.infrastructure.database.repositories.session import SessionRepository
 from backend.infrastructure.database.repositories.user import UserRepository
-from backend.application.user import UserService
 from backend.infrastructure.database.repositories.webhook import WebhookRepository
 from backend.infrastructure.tasks.initialisation import CeleryInitializer
 

@@ -6,4 +6,11 @@ from .user import UserModel
 from .webhook import WebhookModel
 
 
-__all__ = ["Base", "HistoryModel", "ServerModel", "SessionModel", "UserModel", "WebhookModel",]
+__all__ = [
+    "Base",
+    "HistoryModel",
+    "ServerModel",
+    "SessionModel",
+    "UserModel",
+    "WebhookModel",
+]

@@ -1,13 +1,12 @@
 from uuid import UUID
 
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
+from sqlalchemy.orm import mapped_column, Mapped, relationship
 
 from backend.domain.enums.common import ServerStatusEnum
 from backend.infrastructure.database.models import Base
 from backend.infrastructure.database.models.mixins import IDMixin, TimestampMixin
-
 
 
 class ServerModel(Base, IDMixin, TimestampMixin):

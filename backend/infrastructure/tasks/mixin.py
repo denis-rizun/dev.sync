@@ -1,6 +1,7 @@
+from typing import Any
+
 import requests
 from requests import Response, RequestException
-from typing import Any
 
 from backend.core.exceptions import RequesterError
 from backend.core.logger import Logger
