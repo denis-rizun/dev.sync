@@ -2,7 +2,6 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-
 *.so
 
 venv/
@@ -13,13 +12,14 @@ venv/
 
 .cache/
 .pytest_cache/
-
 .mypy_cache/
+
 coverage.xml
 htmlcov/
 *.cover
 *.py,cover
 
+logs/
 *.log
 
 build/
@@ -34,3 +34,12 @@ Thumbs.db
 volumes/
 
 *.pem
+
+node_modules/
+npm-debug.log*
+yarn-error.log*
+yarn-debug.log*
+package-lock.json
+yarn.lock
+frontend/build/
+frontend/dist/

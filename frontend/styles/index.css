@@ -1,0 +1,115 @@
+.hidden.menu {
+    display: none;
+}
+
+.masthead.segment {
+    min-height: 500px;
+    padding: 1em 0;
+}
+
+.masthead .logo.item img {
+    margin-right: 1em;
+}
+.center-button {
+    display: block !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    width: fit-content !important;
+    margin-top: 2em !important;
+}
+
+h1.ui.inverted.header {
+    margin-top: 1.5em !important;
+}
+
+.masthead .ui.menu .ui.button {
+    margin-left: 0.5em;
+}
+
+.masthead h1.ui.header {
+    margin-top: 3em;
+    margin-bottom: 0;
+    font-size: 4em;
+    font-weight: normal;
+}
+
+.masthead h2 {
+    font-size: 1.7em;
+    font-weight: normal;
+}
+
+/* Main section */
+.ui.vertical.stripe {
+    padding: 4em 0;
+}
+
+.ui.vertical.stripe h3 {
+    font-size: 2em;
+}
+
+.ui.vertical.stripe .button + h3,
+.ui.vertical.stripe p + h3 {
+    margin-top: 3em;
+}
+
+.ui.vertical.stripe .floated.image {
+    clear: both;
+}
+
+.ui.vertical.stripe p {
+    font-size: 1.33em;
+}
+
+.ui.vertical.stripe .horizontal.divider {
+    margin: 2em 0;
+}
+
+.quote.stripe.segment {
+    padding: 0;
+}
+
+.quote.stripe.segment .grid .column {
+    padding-top: 5em;
+    padding-bottom: 5em;
+}
+
+.secondary.pointing.menu .toc.item {
+    display: none;
+}
+
+.centered-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+    text-align: center;
+    padding: 4em 0;
+}
+@media only screen and (max-width: 700px) {
+    .ui.fixed.menu {
+        display: none !important;
+    }
+
+    .secondary.pointing.menu .item,
+    .secondary.pointing.menu .menu {
+        display: none;
+    }
+
+    .secondary.pointing.menu .toc.item {
+        display: block;
+    }
+
+    .masthead.segment {
+        min-height: 350px;
+    }
+
+    .masthead h1.ui.header {
+        font-size: 2em;
+        margin-top: 1.5em;
+    }
+
+    .masthead h2 {
+        font-size: 1.5em;
+        margin-top: 0.5em;
+    }
+}

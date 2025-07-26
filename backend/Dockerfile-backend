@@ -2,7 +2,7 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY requirements.txt /app/requirements.txt
+COPY backend/requirements.txt /app/requirements.txt
 
 RUN apt-get update  \
     && pip install --upgrade pip \
@@ -10,7 +10,6 @@ RUN apt-get update  \
 
 COPY backend/ /app/backend/
 COPY .env /app/.env
-COPY alembic.ini /app/alembic.ini
 COPY public.pem /app/public.pem
 COPY private.pem /app/private.pem
 
