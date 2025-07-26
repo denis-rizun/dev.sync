@@ -1,0 +1,18 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt /app/requirements.txt
+
+RUN apt-get update  \
+    && pip install --upgrade pip \
+    && pip install -r requirements.txt
+
+COPY backend/ /app/backend/
+COPY .env /app/.env
+COPY public.pem /app/public.pem
+COPY private.pem /app/private.pem
+
+ENV PYTHONPATH=/app/
+
+CMD ["celery", "-A", "backend.infrastructure.tasks.initialisation", "beat", "--loglevel=info"]

@@ -10,7 +10,7 @@ from backend.domain.abstractions.services.webhook import IWebhookService
 from backend.domain.dtos.webhook import WebhookCreateDTO, WebhookUpdateDTO, WebhookCallDTO
 from backend.domain.entities.webhook import WebhookEntity, WebhookExtendedEntity
 from backend.domain.enums.common import ColumnEnum, ServerStatusEnum
-from backend.infrastructure.tasks.callable.webhook import call_webhook_shell
+from backend.infrastructure.tasks.callable.webhook import WebhookExecutionTask
 
 logger = Logger.setup_logger(__name__)
 
@@ -73,7 +73,7 @@ class WebhookService(IWebhookService):
         webhook = asdict(existing)
         webhook["server"] = server
 
-        call_webhook_shell.delay(webhook, {})
+        WebhookExecutionTask().delay(webhook, {})
         logger.info(f"[WebhookService]: Retry webhook: {existing!r}")
         return existing
 
@@ -108,5 +108,5 @@ class WebhookService(IWebhookService):
         webhook = asdict(existing)
         webhook["server"] = server
 
-        call_webhook_shell.delay(webhook, asdict(data))
+        WebhookExecutionTask().delay(webhook, asdict(data))
         logger.info(f"[WebhookService]: Added webhook to queue: {existing!r}")

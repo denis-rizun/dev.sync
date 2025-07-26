@@ -2,7 +2,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: backend/Dockerfile
+      dockerfile: backend/Dockerfile-backend
     env_file:
       - .env
     environment:
@@ -36,10 +36,53 @@ services:
     networks:
       - dev-sync
 
+  celery_worker:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile-celery_worker
+    env_file:
+      - .env
+    container_name: celery_worker
+    depends_on:
+      - redis
+      - backend
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_BACKEND_URL}
+    networks:
+      - dev-sync
+
+  celery_beat:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile-celery_beat
+    env_file:
+      - .env
+    container_name: celery_beat
+    depends_on:
+      - redis
+      - backend
+    environment:
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_BACKEND_URL}
+    networks:
+      - dev-sync
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "${OUTER_REDIS_PORT}:${INNER_REDIS_PORT}"
+    networks:
+      - dev-sync
+    volumes:
+      - dev_sync_redis_data:/data
+
 
 volumes:
   dev_sync_pg_data:
     driver: local
+  dev_sync_redis_data:
 
 
 networks:

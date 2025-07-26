@@ -1,6 +1,5 @@
 # ------------ FastAPI ------------
 fastapi==0.115.11
-starlette==0.46.1
 uvicorn==0.34.0
 
 # ------------ Pydantic ------------
@@ -31,4 +30,8 @@ ruff==0.11.9
 # ------------ Other stuffs ------------
 colorlog==6.9.0
 dependency_injector==4.48.1
-celery==5.5.3
+requests==2.32.4
+paramiko==3.5.1
+
+# ------------ Celery ------------
+celery[redis]==5.5.3

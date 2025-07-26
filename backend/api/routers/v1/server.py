@@ -6,7 +6,11 @@ from starlette.requests import Request
 from backend.core.utils import Mapper
 from backend.domain.dtos.server import ServerCreateDTO, ServerUpdateDTO
 from backend.infrastructure.dependencies.container import container
-from backend.infrastructure.schemas.server import ServerSchema, ServerCreateSchema, ServerUpdateSchema
+from backend.infrastructure.schemas.server import (
+    ServerSchema,
+    ServerCreateSchema,
+    ServerUpdateSchema
+)
 
 server_router = APIRouter(prefix="/v1/servers", tags=["Server"])
 
