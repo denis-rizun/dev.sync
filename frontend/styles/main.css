@@ -1,0 +1,140 @@
+.hidden-menu {
+    display: none;
+}
+
+.hero-section {
+    min-height: 100vh;
+    margin: 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    scroll-snap-align: start;
+}
+
+.hero-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.hero-title {
+    margin-top: 3em;
+    margin-bottom: 0;
+    font-size: 4em;
+    color: white;
+    font-weight: normal;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.75em 1.5em;
+    font-size: 1.1em;
+    text-decoration: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #2185d0;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #1678c2;
+}
+
+.center-button {
+    margin: 2em auto 0;
+    width: fit-content;
+}
+
+.features-section {
+    padding: 4em 0;
+    background-color: #252525;
+    text-align: center;
+}
+
+.features-section {
+    padding: 0 0 4em;
+    background-color: #252525;
+    text-align: center;
+}
+
+.features-grid {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 2em;
+    text-align: center;
+}
+
+.feature-item {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 3em 1em;
+    height: 200px;
+    color: black;
+    border: 1px solid #a8a8a8;
+    border-radius: 8px;
+    background-color: #a8a8a8;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.features-section h3 {
+    font-size: 2em;
+    margin-bottom: 0.5em;
+}
+
+.features-section p {
+    font-size: 1.33em;
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    height: 100vh;
+}
+
+.hero-section,
+.features-section {
+    scroll-snap-align: start;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 2rem;
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition:
+        opacity 0.7s ease-out,
+        transform 0.7s ease-out;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media only screen and (max-width: 700px) {
+    .hero-title {
+        font-size: 2em;
+        margin-top: 1.5em;
+    }
+
+    .features-grid {
+        flex-direction: column;
+        gap: 2em;
+    }
+
+    .features-section h3,
+    .opensource-section h3 {
+        font-size: 1.5em;
+    }
+}

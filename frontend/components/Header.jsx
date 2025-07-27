@@ -56,7 +56,7 @@ const Header = ({ loginUser }) => {
                     <Link
                         key={item.path}
                         to={item.path}
-                        className={`nav-link ${location.pathname === item.path ? 'active' : ''}`}
+                        className={`nav-link ${location.pathname.startsWith(item.path) ? 'active' : ''}`}
                     >
                         {item.label}
                     </Link>
