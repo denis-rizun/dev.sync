@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../styles/header.css';
 
-const Header = ({ loginUser }) => {
+const Header = ({ user }) => {
     const location = useLocation();
     const dropdownRef = useRef(null);
 
@@ -10,13 +10,13 @@ const Header = ({ loginUser }) => {
         if (dropdownRef.current && window.$) {
             window.$(dropdownRef.current).dropdown();
         }
-    }, [loginUser]);
+    }, [user]);
 
     const renderUserActionComp = () => {
-        if (loginUser?.id) {
+        if (user?.id) {
             return (
                 <div className="dropdown-wrapper">
-                    <span className="username">{loginUser.name}</span>
+                    <span className="username">{user.name}</span>
                     <div className="dropdown-menu">
                         <Link to="/profile" className="dropdown-item">
                             Profile
@@ -63,12 +63,12 @@ const Header = ({ loginUser }) => {
                 ))}
             </div>
             <div className="right-section">
-                {loginUser?.avatar && (
+                {user?.avatar && (
                     <img
                         className="avatar"
                         width="32"
                         height="32"
-                        src={loginUser.avatar}
+                        src={user.avatar}
                         alt="User Avatar"
                     />
                 )}

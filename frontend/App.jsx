@@ -6,21 +6,23 @@ import statusToTag from './utils/statusToTag';
 import Footer from './components/Footer';
 import '/styles/main.css';
 import { useFadeInOnScroll } from './hooks/FadeInOnScroll';
-
-const loginUser = { id: null };
+import {useAuth} from "./hooks/useAuth";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
     useFadeInOnScroll();
+    const user = useAuth();
 
     return (
         <div className="page">
-            <Header loginUser={loginUser} />
+            <Header user={user} />
             <main className="main-section">
                 <section className="hero-section">
                     <div className="hero-container">
                         <h1 className="hero-title">{PROJECT_NAME}</h1>
 
-                        {loginUser?.id ? (
+                        {user?.id ? (
                             <Link
                                 to="/webhook"
                                 className="btn btn-primary center-button"
@@ -52,6 +54,7 @@ const App = () => {
                 </section>
             </main>
             <Footer />
+            <ToastContainer position="top-right" autoClose={3000} />
         </div>
     );
 };
