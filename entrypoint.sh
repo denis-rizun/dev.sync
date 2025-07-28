@@ -11,7 +11,7 @@ if [ -f .env ]; then
 fi
 
 echo "[ALEMBIC]: Running..."
-alembic -c backend/alembic.ini upgrade head
+alembic upgrade head
 
 echo "[FASTAPI]: Running..."
 exec uvicorn backend.main:app --host 0.0.0.0 --port "${API_PORT}"

@@ -2,19 +2,21 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-COPY backend/requirements.txt /app/requirements.txt
+COPY requirements.txt /app/requirements.txt
 
 RUN apt-get update  \
     && pip install --upgrade pip \
     && pip install -r requirements.txt
 
 COPY backend/ /app/backend/
+COPY alembic.ini /app/alembic.ini
+COPY entrypoint.sh /app/entrypoint.sh
 COPY .env /app/.env
 COPY public.pem /app/public.pem
 COPY private.pem /app/private.pem
 
 ENV PYTHONPATH=/app/
 
-RUN chmod +x /app/backend/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
-ENTRYPOINT ["/app/backend/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]
